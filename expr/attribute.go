@@ -99,6 +99,9 @@ type (
 		// described at
 		// http://json-schema.org/latest/json-schema-validation.html#anchor61.
 		Required []string
+		// AllowEmptyValue indicates whether the attribute allows empty
+		// values. This is primarily used for query string parameters.
+		AllowEmptyValue *bool
 	}
 
 	// ValidationFormat is the type used to enumerate the possible string
@@ -369,12 +372,11 @@ func (a *AttributeExpr) IsRequiredNoDefault(attName string) bool {
 // between request types where attributes with default values should not be
 // generated using a pointer value and response types where they should.
 //
-//    DefaultValue UseDefault Pointer (assuming all other conditions are true)
-//    Yes          True       False
-//    Yes          False      True
-//    No           True       True
-//    No           False      True
-//
+//	DefaultValue UseDefault Pointer (assuming all other conditions are true)
+//	Yes          True       False
+//	Yes          False      True
+//	No           True       True
+//	No           False      True
 func (a *AttributeExpr) IsPrimitivePointer(attName string, useDefault bool) bool {
 	o := AsObject(a.Type)
 	if o == nil {
